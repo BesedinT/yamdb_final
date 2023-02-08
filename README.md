@@ -1,4 +1,4 @@
-# INFRA_SP2
+# YAMBD_FINAL
 
 ![example workflow](https://github.com/BesedinT/yamdb_final/actions/workflows/yamdb_workflow.yml/badge.svg)
 
