@@ -67,8 +67,7 @@ class User(AbstractUser):
     def code_gen(self):
         min = settings.MIN_VALUE
         max = settings.MAX_VALUE
-        random_int = random.randint(min, max)
-        return random_int
+        return random.randint(min, max)
 
     def __str__(self):
         return self.username
