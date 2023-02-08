@@ -1,5 +1,7 @@
 # INFRA_SP2
 
+![example workflow](https://github.com/BesedinT/yamdb_final/actions/workflows/yamdb_workflow.yml/badge.svg)
+
 REST API для сервиса YaMDb — базы отзывов о фильмах, книгах и музыке.
 
 Проект YaMDb собирает отзывы пользователей на произведения. Произведения делятся на категории: «Книги», «Фильмы», «Музыка».
