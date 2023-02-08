@@ -7,7 +7,9 @@ services:
       - data_value:/var/lib/postgresql/data/
     env_file:
       - ./.env
+
   web:
+    image: tolik777/infra-web:latest
     build: ../api_yamdb/
     restart: always
     volumes:
