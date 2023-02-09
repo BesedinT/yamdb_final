@@ -71,14 +71,14 @@ REST API для сервиса YaMDb — базы отзывов о фильма
 - Последующие действия выполняются на удаленном сервере после успешного первого деплоя   
 
 - Выполните миграции  
-`$ sudu docker-compose exec web python manage.py makemigrations`  
-`$ sudu docker-compose exec web python manage.py migrate`
+`$ sudo docker-compose exec web python manage.py makemigrations`  
+`$ sudo docker-compose exec web python manage.py migrate`
 
 - Соберите статику    
-`$ sudu docker-compose exec web python manage.py collectstatic --no-input`
+`$ sudo docker-compose exec web python manage.py collectstatic --no-input`
 
 - Для доступа к админке не забудьте создать суперюзера  
-`$ sudu docker-compose exec web python manage.py createsuperuser`
+`$ sudo docker-compose exec web python manage.py createsuperuser`
 
 __________________________________
 
