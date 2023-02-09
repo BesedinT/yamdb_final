@@ -15,7 +15,7 @@ REST API для сервиса YaMDb — базы отзывов о фильма
 
 Предоставляет данные в формате JSON
 
-Запуск проекта осуществляется с помощью docker-compose
+Функционал проекта адаптирован для использования PostgreSQL и развертывания в контейнерах Docker. Используются инструменты CI и CD
 
 ## Стек технологий
 
@@ -28,33 +28,63 @@ REST API для сервиса YaMDb — базы отзывов о фильма
 
 - Склонируйте репозитрий на свой компьютер 
 
-- Создайте `.env` файл в директории `infra/`, в котором должны содержаться следующие переменные:
+- Выполните вход на удаленный сервер  
+
+- Установите docker на сервер:  
+
+`$ sudo apt install docker.io`  
+
+- Установить docker-compose на сервер согласно [документации](https://docs.docker.com/compose/install/)
+
+- Скопируйте файлы docker-compose.yml и default.conf (в папке: nginx) из директории infra на сервер:
+
+`$ scp docker-compose.yml <username>@<host>:/home/<username>/docker-compose.yml`   
+`$ scp -r  nginx/ <username>@<host>:/home/<username>/`
+
+- Для работы с Workflow необходимо добавить в GitHub Actions secrets переменные окружения для работы:
     >DB_ENGINE = django.db.backends.postgresql  
     >DB_NAME = # название БД  
     >POSTGRES_USER = # ваше имя пользователя  
     >POSTGRES_PASSWORD = # пароль для доступа к БД  
     >DB_HOST = db  
-    >DB_PORT = 5432  
-    >SECRET_KEY = '# Django SECRET_KEY'
+    >DB_PORT = 5432 
+     
+    >SECRET_KEY = '# Django SECRET_KEY'  
+    
+    >DOCKER_USERNAME = # имя пользователя на DockerHub  
+    >DOCKER_PASSWORD = # пароль DockerHub  
+    
+    >USER = # имя пользователя на удаленном сервере  
+    >HOST = # IP удаленного сервера  
+    >PASSPHRASE = # пароль ssh-ключа  
+    >SSH_KEY = # SSH ключ (для получения выполните команду на локальном компьютере: cat ~/.ssh/id_rsa) 
+    
+    >TELEGRAM_TO = # ID чата, в который придет сообщение о выполнении Workflow  
+    >TELEGRAM_TOKEN = # токен вашего бота  
 
-- Из папки `infra/` соберите образ при помощи docker-compose  
-`$ docker-compose up -d --build`
+- Workflow запускается после каждого пуша проекта на GitHub и состоит из четырёх шагов:
+     - проверка кода на соответствие стандарту PEP8 (с помощью пакета flake8) и запуск pytest
+     - cборка и доставка докер-образа для контейнера web на Docker Hub
+     - автоматический деплой проекта на удаленный сервер
+     - отправка уведомления в Telegram о том, что процесс деплоя успешно завершился 
+
+- Последующие действия выполняются на удаленном сервере после успешного первого деплоя   
 
 - Выполните миграции  
-`$ docker-compose exec web python manage.py makemigrations`  
-`$ docker-compose exec web python manage.py migrate`
+`$ sudu docker-compose exec web python manage.py makemigrations`  
+`$ sudu docker-compose exec web python manage.py migrate`
 
 - Соберите статику    
-`$ docker-compose exec web python manage.py collectstatic --no-input`
+`$ sudu docker-compose exec web python manage.py collectstatic --no-input`
 
 - Для доступа к админке не забудьте создать суперюзера  
-`$ docker-compose exec web python manage.py createsuperuser`
+`$ sudu docker-compose exec web python manage.py createsuperuser`
 
 __________________________________
 
-Проект запустится на http://localhost/
+Проект запустится на http://{IP адрес удаленного сервера}/
 
-Полная документация доступна по адресу http://localhost/redoc/  
+Полная документация доступна по адресу http://{IP адрес удаленного сервера}/redoc/  
 
 ## Алгоритм регистрации пользователей
 - Пользователь отправляет запрос с параметрами *email* и *username* на */auth/signup/*.
@@ -75,7 +105,7 @@ __________________________________
 
 **Получение JWT-токена:**
 
-POST http://localhost/api/v1/auth/token/
+POST http://{IP адрес удаленного сервера}/api/v1/auth/token/
 ```
 {
   "username": "string",
@@ -90,7 +120,7 @@ POST http://localhost/api/v1/auth/token/
 ```
 **Получение списка всех произведений:**
 
-GET http://localhost/api/v1/titles/
+GET http://{IP адрес удаленного сервера}/api/v1/titles/
 
 *Ответ 200 OK:*
 ```
@@ -123,7 +153,7 @@ GET http://localhost/api/v1/titles/
 ```
 **Добавление произведения:**
 
-POST http://localhost/api/v1/titles/
+POST http://{IP адрес удаленного сервера}/api/v1/titles/
 ```
 {
     "name": "string",
@@ -157,7 +187,7 @@ POST http://localhost/api/v1/titles/
 ```
 **Частичное обновление отзыва по id:**
 
-PATCH http://localhost/api/v1/titles/{title_id}/reviews/{review_id}/
+PATCH http://{IP адрес удаленного сервера}/api/v1/titles/{title_id}/reviews/{review_id}/
 ```
 {
   "text": "string",
@@ -176,7 +206,7 @@ PATCH http://localhost/api/v1/titles/{title_id}/reviews/{review_id}/
 ```
 **Получение комментария к отзыву:**
 
-GET http://localhost/api/v1/titles/{title_id}/reviews/{review_id}/comments/{comment_id}/
+GET http://{IP адрес удаленного сервера}/api/v1/titles/{title_id}/reviews/{review_id}/comments/{comment_id}/
 
 *Ответ 200 OK:*
 ```
