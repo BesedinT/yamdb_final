@@ -17,7 +17,7 @@ REST API для сервиса YaMDb — базы отзывов о фильма
 
 Функционал проекта адаптирован для использования PostgreSQL и развертывания в контейнерах Docker. Используются инструменты CI и CD
 
-Проект был запущен и доступен по адресу: [https:](https://158.160.16.72)
+Проект запущен и доступен по [адресу](http://158.160.16.72/api/v1/)
 
 ## Стек технологий
 
@@ -71,13 +71,6 @@ REST API для сервиса YaMDb — базы отзывов о фильма
      - отправка уведомления в Telegram о том, что процесс деплоя успешно завершился 
 
 - Последующие действия выполняются на удаленном сервере после успешного деплоя   
-
-- Выполните миграции  
-`$ sudo docker-compose exec web python manage.py makemigrations`  
-`$ sudo docker-compose exec web python manage.py migrate`
-
-- Соберите статику    
-`$ sudo docker-compose exec web python manage.py collectstatic --no-input`
 
 - Для доступа к админке не забудьте создать суперюзера  
 `$ sudo docker-compose exec web python manage.py createsuperuser`
