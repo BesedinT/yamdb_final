@@ -87,11 +87,11 @@ REST API для сервиса YaMDb — базы отзывов о фильма
 
 - Для доступа к админке не забудьте создать суперюзера  
 
-`$ sudo docker-compose exec web python manage.py createsuperuser`
+`$ sudo docker-compose exec web python manage.py createsuperuser`  
 
 __________________________________
 
-Проект запустится на http://{IP адрес удаленного сервера}/
+Проект запустится на http://{IP адрес удаленного сервера}/   
 
 Полная документация доступна по адресу http://{IP адрес удаленного сервера}/redoc/  
 
