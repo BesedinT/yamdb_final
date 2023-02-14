@@ -83,7 +83,7 @@ REST API для сервиса YaMDb — базы отзывов о фильма
 
 - Соберите статику     
 
-`$ sudo docker-compose exec web python manage.py collectstatic --no-input    
+`$ sudo docker-compose exec web python manage.py collectstatic --no-input`    
 
 - Для доступа к админке не забудьте создать суперюзера  
 
